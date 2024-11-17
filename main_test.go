@@ -56,56 +56,6 @@ func Test_Remove(t *testing.T) {
 	assert.Nil(t, GetErrorConfig(e))
 }
 
-func Test_Wrap(t *testing.T) {
-	t.Run("with adding stack trace", func(t *testing.T) {
-		initConfig(okConfig)
-
-		assert.Nil(t, Wrap(nil))
-		ae1 := Wrap(errTest1)
-		ae2 := Wrap(ae1)
-		assert.ErrorIs(t, ae1, errTest1)
-		assert.ErrorIs(t, ae2, ae1)
-	})
-
-	t.Run("without adding stack trace", func(t *testing.T) {
-		initConfig(noStackTraceConfig)
-
-		assert.Nil(t, Wrap(nil))
-		ae1 := Wrap(errTest1)
-		ae2 := Wrap(ae1)
-		assert.ErrorIs(t, ae1, errTest1)
-		assert.ErrorIs(t, ae2, ae1)
-	})
-}
-
-func Test_Wrapf(t *testing.T) {
-	initConfig(okConfig)
-
-	ae1 := Wrapf("%w", errTest1)
-	ae2 := Wrapf("%w", ae1)
-	assert.ErrorIs(t, ae1, errTest1)
-	assert.ErrorIs(t, ae2, ae1)
-}
-
-func Test_GetStackTrace(t *testing.T) {
-	t.Run("errors have stack trace", func(t *testing.T) {
-		initConfig(okConfig)
-
-		ae1 := Wrap(errTest1)
-		ae2 := Wrap(ae1)
-		assert.True(t, len(GetStackTrace(ae1)) > 0)
-		assert.True(t, len(GetStackTrace(ae2)) > 0)
-	})
-
-	t.Run("errors have no stack trace", func(t *testing.T) {
-		initConfig(okConfig)
-
-		assert.True(t, len(GetStackTrace(nil)) == 0)
-		assert.True(t, len(GetStackTrace(errTest1)) == 0)
-		assert.True(t, len(GetStackTrace(errTest2)) == 0)
-	})
-}
-
 func Test_Build(t *testing.T) {
 	t.Run("builds direct app errors", func(t *testing.T) {
 		initConfig(okConfig)

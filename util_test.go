@@ -33,7 +33,7 @@ type err3 struct {
 func (e err3) Error() string   { return "err3" }
 func (e err3) Unwrap() []error { return e.errs }
 
-func Test_unwrapMulti(t *testing.T) {
+func Test_UnwrapMulti(t *testing.T) {
 	assert.Nil(t, UnwrapMulti(err1{}))
 
 	assert.Nil(t, UnwrapMulti(err2{}))

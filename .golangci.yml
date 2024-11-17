@@ -1,0 +1,74 @@
+linters-settings:
+  funlen:
+    lines: 100
+    statements: 80
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/tiendc/go-apperrors)
+  gocyclo:
+    min-complexity: 20
+  goimports:
+    local-prefixes: github.com/golangci/golangci-lint
+  lll:
+    line-length: 120
+  misspell:
+    locale: US
+
+linters:
+  enable:
+    - bodyclose
+    - contextcheck
+    - dogsled
+    - errcheck
+    - errname
+    - errorlint
+    - exhaustive
+    - copyloopvar
+    - err113
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gci
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - mnd
+    - nakedret
+    - nestif
+    - nilerr
+    - rowserrcheck
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - funlen
+        - contextcheck
+        - staticcheck
+        - gocyclo
+        - gocognit
+        - err113
+        - errname
+        - forcetypeassert
+        - wrapcheck
+        - mnd
+        - errorlint
+        - unused

@@ -12,6 +12,7 @@ func Test_Config_setDefault(t *testing.T) {
 
 	assert.Nil(t, config.WrapFunc)
 	assert.Equal(t, defaultMaxStackDepth, config.MaxStackDepth)
+	assert.Equal(t, defaultLanguage, config.DefaultLanguage)
 	assert.Nil(t, config.TranslationFunc)
 	assert.False(t, config.FallbackToErrorContentOnMissingTranslation)
 	assert.Equal(t, defaultErrorSeparator, config.MultiErrorSeparator)

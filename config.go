@@ -4,25 +4,6 @@ import (
 	"net/http"
 )
 
-type Language string
-
-const (
-	LanguageEn = Language("en")
-	LanguageFr = Language("fr")
-	LanguageDe = Language("de")
-	LanguageEs = Language("es")
-	LanguageIt = Language("it")
-	LanguagePt = Language("pt")
-	LanguageRu = Language("ru")
-	LanguageZh = Language("zh")
-	LanguageJa = Language("ja")
-	LanguageKo = Language("ko")
-	LanguageAr = Language("ar")
-	LanguageHi = Language("hi")
-)
-
-type TranslationFunc func(lang Language, key string, params map[string]any) (string, error)
-
 // Config to provide global config for the library
 type Config struct {
 	// Debug flag indicates debug mode (default: `false`).
@@ -37,6 +18,8 @@ type Config struct {
 	// If WrapFunc is set with custom value, this config has no effect.
 	MaxStackDepth int
 
+	// DefaultLanguage default language (default: `LanguageEn`)
+	DefaultLanguage Language
 	// TranslationFunc function to translate message into a specific language (default: `nil`)
 	TranslationFunc TranslationFunc
 	// FallbackToErrorContentOnMissingTranslation indicates fallback to error content
@@ -58,6 +41,9 @@ func (cfg *Config) setDefault() {
 	if cfg.MaxStackDepth == 0 {
 		cfg.MaxStackDepth = defaultMaxStackDepth
 	}
+	if cfg.DefaultLanguage == nil {
+		cfg.DefaultLanguage = defaultLanguage
+	}
 	if cfg.MultiErrorSeparator == "" {
 		cfg.MultiErrorSeparator = defaultErrorSeparator
 	}
@@ -74,6 +60,7 @@ func (cfg *Config) setDefault() {
 
 const (
 	defaultMaxStackDepth         = 50
+	defaultLanguage              = LanguageEn
 	defaultErrorSeparator        = "\n"
 	defaultErrorStatus           = http.StatusInternalServerError
 	defaultValidationErrorStatus = http.StatusBadRequest
@@ -85,6 +72,7 @@ var (
 		Debug:         false,
 		MaxStackDepth: defaultMaxStackDepth,
 
+		DefaultLanguage: defaultLanguage,
 		FallbackToErrorContentOnMissingTranslation: true,
 		MultiErrorSeparator:                        defaultErrorSeparator,
 

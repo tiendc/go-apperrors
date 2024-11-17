@@ -15,6 +15,7 @@ var (
 var (
 	okConfig = &Config{
 		Debug:           true,
+		DefaultLanguage: LanguageEn,
 		TranslationFunc: testTranslateOK,
 		FallbackToErrorContentOnMissingTranslation: true,
 		MultiErrorSeparator:                        ". ",
@@ -22,6 +23,7 @@ var (
 
 	noStackTraceConfig = &Config{
 		Debug:           true,
+		DefaultLanguage: LanguageEn,
 		WrapFunc:        func(err error) error { return err },
 		TranslationFunc: testTranslateOK,
 		FallbackToErrorContentOnMissingTranslation: true,
@@ -30,6 +32,7 @@ var (
 
 	failedTransConfig = &Config{
 		Debug:           true,
+		DefaultLanguage: LanguageEn,
 		TranslationFunc: testTranslateFail,
 		FallbackToErrorContentOnMissingTranslation: true,
 		MultiErrorSeparator:                        ". ",
@@ -37,6 +40,7 @@ var (
 
 	notransConfig = &Config{
 		Debug:           true,
+		DefaultLanguage: LanguageEn,
 		TranslationFunc: nil,
 		FallbackToErrorContentOnMissingTranslation: true,
 		MultiErrorSeparator:                        ". ",
@@ -44,6 +48,7 @@ var (
 
 	nonDebugConfig = &Config{
 		Debug:           false,
+		DefaultLanguage: LanguageEn,
 		TranslationFunc: testTranslateOK,
 		FallbackToErrorContentOnMissingTranslation: true,
 		MultiErrorSeparator:                        ". ",

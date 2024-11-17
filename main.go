@@ -24,10 +24,10 @@ func Init(cfg *Config) {
 //
 // Example:
 //
-//		var ErrRedisKeyNotFound = Add(redis.Nil, &ErrorInfo{
-//	       Status: http.StatusNotFound,
-//	       Code: "ErrRedisKeyNotFound",
-//	    })
+//	 var ErrRedisKeyNotFound = Add(redis.Nil, &ErrorConfig{
+//		      Status: http.StatusNotFound,
+//		      Code: "ErrRedisKeyNotFound",
+//	 })
 func Add(err error, cfg *ErrorConfig) error {
 	if err == nil || cfg == nil {
 		panic("error and config must not be nil")
@@ -48,8 +48,8 @@ func Add(err error, cfg *ErrorConfig) error {
 //
 // Example:
 //
-// var ErrTokenInvalid = Create("ErrTokenInvalid", &ErrorInfo{Status: http.StatusUnauthorized})
-// var ErrNoPermission = Create("ErrNoPermission", &ErrorInfo{Status: http.StatusForbidden})
+// var ErrTokenInvalid = Create("ErrTokenInvalid", &ErrorConfig{Status: http.StatusUnauthorized})
+// var ErrNoPermission = Create("ErrNoPermission", &ErrorConfig{Status: http.StatusForbidden})
 func Create(code string, cfg *ErrorConfig) error {
 	if code == "" || cfg == nil {
 		panic("error key and config must not be nil")
@@ -106,7 +106,7 @@ func GetStackTrace(err error) []runtime.Frame {
 	if err == nil {
 		return nil
 	}
-	// If it is `go-errors`.*Error, get the stack trace from it
+	// If it is *go-errors.Error, get the stack trace from it
 	var gErr *goerrors.Error
 	if !errors.As(err, &gErr) {
 		return nil

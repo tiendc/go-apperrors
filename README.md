@@ -31,8 +31,8 @@ TBD
 
 [doc-img]: https://pkg.go.dev/badge/github.com/tiendc/go-apperrors
 [doc]: https://pkg.go.dev/github.com/tiendc/go-apperrors
-[gover-img]: https://img.shields.io/badge/Go-%3E%3D%201.18-blue
-[gover]: https://img.shields.io/badge/Go-%3E%3D%201.18-blue
+[gover-img]: https://img.shields.io/badge/Go-%3E%3D%201.20-blue
+[gover]: https://img.shields.io/badge/Go-%3E%3D%201.20-blue
 [ci-img]: https://github.com/tiendc/go-apperrors/actions/workflows/go.yml/badge.svg
 [ci]: https://github.com/tiendc/go-apperrors/actions/workflows/go.yml
 [cov-img]: https://codecov.io/gh/tiendc/go-apperrors/branch/main/graph/badge.svg

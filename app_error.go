@@ -44,8 +44,8 @@ type AppError interface {
 	Build(Language, ...InfoBuilderOption) *InfoBuilderResult
 }
 
-// DefaultAppError implements AppError interface
-type DefaultAppError struct {
+// defaultAppError implements AppError interface
+type defaultAppError struct {
 	err           error
 	cause         error
 	params        map[string]any
@@ -58,13 +58,13 @@ type DefaultAppError struct {
 }
 
 // Error implements `error` interface
-func (e *DefaultAppError) Error() string {
+func (e *defaultAppError) Error() string {
 	return e.err.Error()
 }
 
 // Is implementation used by errors.Is().
 // This function returns true if either the inner error or the cause satisfies.
-func (e *DefaultAppError) Is(err error) bool {
+func (e *defaultAppError) Is(err error) bool {
 	if errors.Is(e.err, err) {
 		return true
 	}
@@ -75,50 +75,50 @@ func (e *DefaultAppError) Is(err error) bool {
 }
 
 // Unwrap implementation used by errors.Unwrap() and errors.Is()
-func (e *DefaultAppError) Unwrap() error {
+func (e *defaultAppError) Unwrap() error {
 	return e.err
 }
 
-func (e *DefaultAppError) Params() map[string]any {
+func (e *defaultAppError) Params() map[string]any {
 	return e.params
 }
 
-func (e *DefaultAppError) TransParams() map[string]string {
+func (e *defaultAppError) TransParams() map[string]string {
 	return e.transParams
 }
 
-func (e *DefaultAppError) Cause() error {
+func (e *defaultAppError) Cause() error {
 	return e.cause
 }
 
-func (e *DefaultAppError) Debug() string {
+func (e *defaultAppError) Debug() string {
 	return e.debug
 }
 
-func (e *DefaultAppError) CustomConfig() *ErrorConfig {
+func (e *defaultAppError) CustomConfig() *ErrorConfig {
 	return e.customConfig
 }
 
-func (e *DefaultAppError) CustomBuilder() InfoBuilderFunc {
+func (e *defaultAppError) CustomBuilder() InfoBuilderFunc {
 	return e.customBuilder
 }
 
-func (e *DefaultAppError) WithParam(k string, v any) AppError {
+func (e *defaultAppError) WithParam(k string, v any) AppError {
 	e.params[k] = v
 	return e
 }
 
-func (e *DefaultAppError) WithTransParam(k string, v string) AppError {
+func (e *defaultAppError) WithTransParam(k string, v string) AppError {
 	e.transParams[k] = v
 	return e
 }
 
-func (e *DefaultAppError) WithCause(cause error) AppError {
+func (e *defaultAppError) WithCause(cause error) AppError {
 	e.cause = cause
 	return e
 }
 
-func (e *DefaultAppError) WithDebug(format string, args ...any) AppError {
+func (e *defaultAppError) WithDebug(format string, args ...any) AppError {
 	if !globalConfig.Debug {
 		return e
 	}
@@ -131,18 +131,18 @@ func (e *DefaultAppError) WithDebug(format string, args ...any) AppError {
 	return e
 }
 
-func (e *DefaultAppError) WithCustomConfig(cfg *ErrorConfig) AppError {
+func (e *defaultAppError) WithCustomConfig(cfg *ErrorConfig) AppError {
 	e.customConfig = cfg
 	return e
 }
 
-func (e *DefaultAppError) WithCustomBuilder(infoBuilder InfoBuilderFunc) AppError {
+func (e *defaultAppError) WithCustomBuilder(infoBuilder InfoBuilderFunc) AppError {
 	e.customBuilder = infoBuilder
 	return e
 }
 
 // Config returns the custom config if set, otherwise returns the global mapping one
-func (e *DefaultAppError) Config() *ErrorConfig {
+func (e *defaultAppError) Config() *ErrorConfig {
 	if e.disallowGlobalConfigMapping {
 		return e.customConfig
 	}
@@ -153,7 +153,7 @@ func (e *DefaultAppError) Config() *ErrorConfig {
 }
 
 // BuildConfig builds config for building info from the error
-func (e *DefaultAppError) BuildConfig(lang Language, options ...InfoBuilderOption) *InfoBuilderConfig {
+func (e *defaultAppError) BuildConfig(lang Language, options ...InfoBuilderOption) *InfoBuilderConfig {
 	errCfg := e.Config()
 	if errCfg == nil {
 		errCfg = &ErrorConfig{}
@@ -179,12 +179,12 @@ func (e *DefaultAppError) BuildConfig(lang Language, options ...InfoBuilderOptio
 }
 
 // Build builds error info
-func (e *DefaultAppError) Build(lang Language, options ...InfoBuilderOption) *InfoBuilderResult {
+func (e *defaultAppError) Build(lang Language, options ...InfoBuilderOption) *InfoBuilderResult {
 	return e.build(e.BuildConfig(lang, options...))
 }
 
 // build builds error info using the given building config
-func (e *DefaultAppError) build(buildCfg *InfoBuilderConfig) *InfoBuilderResult {
+func (e *defaultAppError) build(buildCfg *InfoBuilderConfig) *InfoBuilderResult {
 	if buildCfg.InfoBuilderFunc != nil {
 		return buildCfg.InfoBuilderFunc(e, buildCfg)
 	}
@@ -217,7 +217,7 @@ func (e *DefaultAppError) build(buildCfg *InfoBuilderConfig) *InfoBuilderResult 
 }
 
 // buildMessage builds detailed message of the error
-func (e *DefaultAppError) buildMessage(buildCfg *InfoBuilderConfig, result *InfoBuilderResult) (msg, title string) {
+func (e *defaultAppError) buildMessage(buildCfg *InfoBuilderConfig, result *InfoBuilderResult) (msg, title string) {
 	title = buildCfg.ErrorConfig.Title
 	if title == "" {
 		title = http.StatusText(result.ErrorInfo.Status)
@@ -257,7 +257,7 @@ func (e *DefaultAppError) buildMessage(buildCfg *InfoBuilderConfig, result *Info
 }
 
 // buildParams builds param map from params and translating params
-func (e *DefaultAppError) buildParams(buildCfg *InfoBuilderConfig, result *InfoBuilderResult) map[string]any {
+func (e *defaultAppError) buildParams(buildCfg *InfoBuilderConfig, result *InfoBuilderResult) map[string]any {
 	params := e.params
 	for k, v := range e.transParams {
 		if translated, err := buildCfg.TranslationFunc(buildCfg.Language, v, nil); err != nil {
@@ -270,9 +270,9 @@ func (e *DefaultAppError) buildParams(buildCfg *InfoBuilderConfig, result *InfoB
 	return params
 }
 
-// newDefaultAppError creates *DefaultAppError
-func newDefaultAppError(err error) *DefaultAppError {
-	return &DefaultAppError{
+// newDefaultAppError creates *defaultAppError
+func newDefaultAppError(err error) *defaultAppError {
+	return &defaultAppError{
 		err:         Wrap(err),
 		params:      map[string]any{},
 		transParams: map[string]string{},

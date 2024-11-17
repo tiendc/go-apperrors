@@ -15,7 +15,7 @@ var (
 )
 
 type testVldErr struct {
-	*DefaultAppError
+	*defaultAppError
 }
 
 func (e *testVldErr) Build(lang Language, options ...InfoBuilderOption) *InfoBuilderResult {
@@ -78,9 +78,9 @@ func Test_ValidationError(t *testing.T) {
 
 		assert.Nil(t, NewValidationError())
 		vldErr := NewValidationError(
-			&testVldErr{DefaultAppError: NewAppError(err3rdPartyVld1).(*DefaultAppError)},
-			&testVldErr{DefaultAppError: NewAppError(err3rdPartyVld2).(*DefaultAppError)},
-			&testVldErr{DefaultAppError: NewAppError(err3rdPartyVld3).(*DefaultAppError)},
+			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld1).(*defaultAppError)},
+			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld2).(*defaultAppError)},
+			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld3).(*defaultAppError)},
 		)
 
 		result := vldErr.Build(LanguageEn)

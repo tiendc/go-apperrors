@@ -18,6 +18,12 @@ type testVldErr struct {
 	*defaultAppError
 }
 
+type test3rdPartyVldErr struct {
+	errStr string
+}
+
+func (e *test3rdPartyVldErr) Error() string { return e.errStr }
+
 func (e *testVldErr) Build(lang Language, options ...InfoBuilderOption) *InfoBuilderResult {
 	var message string
 	buildCfg := e.BuildConfig(lang, options...)
@@ -38,14 +44,16 @@ func Test_ValidationError(t *testing.T) {
 		initConfig(okConfig)
 
 		infoBuilder := func(e AppError, buildCfg *InfoBuilderConfig) *InfoBuilderResult {
-			var message string
+			vldErr := &test3rdPartyVldErr{}
+			errors.As(e, &vldErr)
+			message := vldErr.errStr
 			if buildCfg.TranslationFunc != nil {
 				message, _ = buildCfg.TranslationFunc(buildCfg.Language, e.Error(), nil)
 			}
 			return &InfoBuilderResult{
 				ErrorInfo: &ErrorInfo{
 					Status:  http.StatusBadRequest,
-					Code:    "ErrValidationItem",
+					Code:    vldErr.errStr,
 					Message: message,
 				},
 			}
@@ -53,7 +61,9 @@ func Test_ValidationError(t *testing.T) {
 
 		assert.Nil(t, NewValidationErrorWithInfoBuilder(nil))
 		vldErr := NewValidationErrorWithInfoBuilder(infoBuilder,
-			err3rdPartyVld1, err3rdPartyVld2, err3rdPartyVld3)
+			&test3rdPartyVldErr{errStr: "3rdPartyVldErr1"},
+			&test3rdPartyVldErr{errStr: "3rdPartyVldErr2"},
+			&test3rdPartyVldErr{errStr: "3rdPartyVldErr3"})
 
 		result := vldErr.Build(LanguageEn)
 		errInfo := result.ErrorInfo
@@ -64,13 +74,18 @@ func Test_ValidationError(t *testing.T) {
 
 		inErr0 := errInfo.InnerErrors[0]
 		assert.Equal(t, http.StatusBadRequest, inErr0.Status)
-		assert.Equal(t, "ErrValidationItem", inErr0.Code)
-		assert.Equal(t, "(ErrValidation1)-in-en", inErr0.Message)
+		assert.Equal(t, "3rdPartyVldErr1", inErr0.Code)
+		assert.Equal(t, "(3rdPartyVldErr1)-in-en", inErr0.Message)
 
 		inErr1 := errInfo.InnerErrors[1]
 		assert.Equal(t, http.StatusBadRequest, inErr1.Status)
-		assert.Equal(t, "ErrValidationItem", inErr1.Code)
-		assert.Equal(t, "(ErrValidation2)-in-en", inErr1.Message)
+		assert.Equal(t, "3rdPartyVldErr2", inErr1.Code)
+		assert.Equal(t, "(3rdPartyVldErr2)-in-en", inErr1.Message)
+
+		inErr2 := errInfo.InnerErrors[2]
+		assert.Equal(t, http.StatusBadRequest, inErr2.Status)
+		assert.Equal(t, "3rdPartyVldErr3", inErr2.Code)
+		assert.Equal(t, "(3rdPartyVldErr3)-in-en", inErr2.Message)
 	})
 
 	t.Run("success: implement AppError interface", func(t *testing.T) {
@@ -99,5 +114,10 @@ func Test_ValidationError(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, inErr1.Status)
 		assert.Equal(t, "ErrValidationItem", inErr1.Code)
 		assert.Equal(t, "(ErrValidation2)-in-en", inErr1.Message)
+
+		inErr2 := errInfo.InnerErrors[2]
+		assert.Equal(t, http.StatusBadRequest, inErr2.Status)
+		assert.Equal(t, "ErrValidationItem", inErr2.Code)
+		assert.Equal(t, "(ErrValidation3)-in-en", inErr2.Message)
 	})
 }

@@ -35,6 +35,9 @@ type Config struct {
 	DefaultValidationErrorStatus int
 	// DefaultValidationErrorCode default code for validation error if unset (default: `ErrValidation`)
 	DefaultValidationErrorCode string
+
+	// DefaultLogLevel default log level for errors if unset (default: `LogLevelNone`)
+	DefaultLogLevel LogLevel
 }
 
 func (cfg *Config) setDefault() {
@@ -56,6 +59,9 @@ func (cfg *Config) setDefault() {
 	if cfg.DefaultValidationErrorCode == "" {
 		cfg.DefaultValidationErrorCode = defaultValidationErrorCode
 	}
+	if cfg.DefaultLogLevel == LogLevelNone {
+		cfg.DefaultLogLevel = defaultLogLevel
+	}
 }
 
 const (
@@ -65,6 +71,7 @@ const (
 	defaultErrorStatus           = http.StatusInternalServerError
 	defaultValidationErrorStatus = http.StatusBadRequest
 	defaultValidationErrorCode   = "ErrValidation"
+	defaultLogLevel              = LogLevelNone
 )
 
 var (
@@ -79,6 +86,8 @@ var (
 		DefaultErrorStatus:           defaultErrorStatus,
 		DefaultValidationErrorStatus: defaultValidationErrorStatus,
 		DefaultValidationErrorCode:   defaultValidationErrorCode,
+
+		DefaultLogLevel: defaultLogLevel,
 	}
 
 	mapError = make(map[error]*ErrorConfig, 50) //nolint:mnd

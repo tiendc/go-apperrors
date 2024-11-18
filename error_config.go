@@ -2,7 +2,9 @@ package goapperrors
 
 import "errors"
 
-// LogLevel represents log level set for an error
+// LogLevel represents log level set for an error.
+// You can use LogLevel to report the level of an error to external
+// services such as Sentry or Rollbar.
 type LogLevel int8
 
 const (

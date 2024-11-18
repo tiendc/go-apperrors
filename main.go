@@ -46,8 +46,8 @@ func Add(err error, cfg *ErrorConfig) error {
 //
 // Example:
 //
-// var ErrTokenInvalid = Create("ErrTokenInvalid", &ErrorConfig{Status: http.StatusUnauthorized})
-// var ErrNoPermission = Create("ErrNoPermission", &ErrorConfig{Status: http.StatusForbidden})
+//	var ErrTokenInvalid = Create("ErrTokenInvalid", &ErrorConfig{Status: http.StatusUnauthorized})
+//	var ErrNoPermission = Create("ErrNoPermission", &ErrorConfig{Status: http.StatusForbidden})
 func Create(code string, cfg *ErrorConfig) error {
 	if code == "" || cfg == nil {
 		panic("error key and config must not be nil")

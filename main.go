@@ -83,5 +83,5 @@ func Build(err error, lang Language, options ...InfoBuilderOption) *InfoBuilderR
 			break
 		}
 	}
-	return NewAppError(err).Build(lang, options...)
+	return New(err).Build(lang, options...)
 }

@@ -10,8 +10,8 @@ import (
 func Test_AppErrorSlice(t *testing.T) {
 	initConfig(okConfig)
 
-	ae1 := NewAppError(errTest1)
-	ae2 := NewAppError(ae1)
+	ae1 := New(errTest1)
+	ae2 := New(ae1)
 	aeSlice := AppErrors{ae1, ae2}
 
 	assert.ErrorIs(t, aeSlice, errTest1)

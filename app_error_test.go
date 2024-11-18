@@ -144,7 +144,7 @@ func Test_AppError_Build(t *testing.T) {
 		assert.Equal(t, "(ErrCustom)-in-zh", errInfo2.Message)
 		assert.Equal(t, LogLevelNone, errInfo2.LogLevel)
 		assert.Equal(t, "", errInfo2.Debug)
-		assert.Equal(t, "", errInfo2.Cause)
+		assert.Equal(t, "ErrTest2", errInfo2.Cause)
 		assert.Equal(t, 0, len(errInfo2.InnerErrors))
 	})
 

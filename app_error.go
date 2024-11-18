@@ -215,6 +215,8 @@ func (e *defaultAppError) build(buildCfg *InfoBuilderConfig) *InfoBuilderResult 
 		errInfo.Debug = e.debug
 		if e.cause != nil {
 			errInfo.Cause = e.cause.Error()
+		} else {
+			errInfo.Cause = e.err.Error()
 		}
 	}
 

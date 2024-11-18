@@ -158,14 +158,19 @@ func (e *defaultAppError) BuildConfig(lang Language, options ...InfoBuilderOptio
 	if errCfg == nil {
 		errCfg = &ErrorConfig{}
 	}
-	if errCfg.Status == 0 {
-		errCfg.Status = globalConfig.DefaultErrorStatus
+	// Copy config to a struct object
+	errCfgObj := *errCfg
+	if errCfgObj.Status == 0 {
+		errCfgObj.Status = globalConfig.DefaultErrorStatus
 	}
-	if errCfg.Code == "" {
-		errCfg.Code = UnwrapToRoot(e.err).Error()
+	if errCfgObj.Code == "" {
+		errCfgObj.Code = UnwrapToRoot(e.err).Error()
+	}
+	if errCfgObj.LogLevel == LogLevelNone {
+		errCfgObj.LogLevel = globalConfig.DefaultLogLevel
 	}
 	buildCfg := &InfoBuilderConfig{
-		ErrorConfig:     *errCfg,
+		ErrorConfig:     errCfgObj,
 		InfoBuilderFunc: e.customBuilder,
 		Language:        lang,
 		ErrorSeparator:  globalConfig.MultiErrorSeparator,

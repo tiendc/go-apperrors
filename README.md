@@ -23,7 +23,7 @@ go get github.com/tiendc/go-apperrors
 
 - Initializes `go-apperrors` at program startup
 
-```
+```go
 import gae "github.com/tiendc/go-apperrors"
 
 func main() {
@@ -41,7 +41,7 @@ func main() {
 
 - Defines your errors
 
-```
+```go
 // It is recommended to add a new directory for placing app errors.
 // In this example, I use `apperrors/errors.go`.
 
@@ -72,7 +72,7 @@ var (
 
 - Handles errors in your main processing code
 
-```
+```go
 // There are some use cases as below.
 
 // 1. You get an unexpected error
@@ -101,7 +101,7 @@ if `user.ID` is not in `project.userIDs` {
 
 - Handles validation errors
 
-```
+```go
 // Validation is normally performed when you parse requests from client.
 // You may use an external lib for the validation. That's why you need to make
 // `adapter` code to transform the validation errors to `AppError`s.
@@ -134,7 +134,7 @@ func (req UpdateProjectReq) Validate() gae.ValidationError {
 
 - Handles errors before returning them to client
 
-```
+```go
 // In the base handler, implements function `RenderError()`
 func RenderError(err error, requestWriter Writer) {
     // Gets language from request, you can use util `gae.ParseAcceptLanguage()`

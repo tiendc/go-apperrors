@@ -5,15 +5,15 @@ import "errors"
 // LogLevel represents log level set for an error.
 // You can use LogLevel to report the level of an error to external
 // services such as Sentry or Rollbar.
-type LogLevel int8
+type LogLevel string
 
 const (
-	LogLevelNone  LogLevel = iota
-	LogLevelDebug LogLevel = iota
-	LogLevelInfo  LogLevel = iota
-	LogLevelWarn  LogLevel = iota
-	LogLevelError LogLevel = iota
-	LogLevelFatal LogLevel = iota
+	LogLevelNone  LogLevel = ""
+	LogLevelDebug LogLevel = "debug"
+	LogLevelInfo  LogLevel = "info"
+	LogLevelWarn  LogLevel = "warning"
+	LogLevelError LogLevel = "error"
+	LogLevelFatal LogLevel = "fatal"
 )
 
 // ErrorConfig configuration of an error to be used when build error info

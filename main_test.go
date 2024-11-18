@@ -60,8 +60,8 @@ func Test_Build(t *testing.T) {
 	t.Run("builds direct app errors", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae1 := NewAppError(errTest1)
-		ae2 := NewMultiError(NewAppError(errTest1), NewAppError(errTest2)).
+		ae1 := New(errTest1)
+		ae2 := NewMultiError(New(errTest1), New(errTest2)).
 			WithCustomConfig(&ErrorConfig{
 				Status: 1234,
 				Code:   "Err1234",
@@ -86,8 +86,8 @@ func Test_Build(t *testing.T) {
 	t.Run("builds indirect app errors", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae1 := NewAppError(errTest1)
-		ae2 := NewMultiError(NewAppError(errTest1), NewAppError(errTest2)).
+		ae1 := New(errTest1)
+		ae2 := NewMultiError(New(errTest1), New(errTest2)).
 			WithCustomConfig(&ErrorConfig{
 				Status: 1234,
 				Code:   "Err1234",

@@ -286,8 +286,8 @@ func newDefaultAppError(err error) *defaultAppError {
 	}
 }
 
-// NewAppError creates an AppError containing the given error
-func NewAppError(err error) AppError {
+// New creates an AppError containing the given error
+func New(err error) AppError {
 	if err == nil {
 		return nil
 	}

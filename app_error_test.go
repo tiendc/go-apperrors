@@ -11,9 +11,9 @@ import (
 func Test_NewAppError(t *testing.T) {
 	initConfig(okConfig)
 
-	ae1 := NewAppError(nil)
-	ae2 := NewAppError(errTest1)
-	ae3 := NewAppError(ae2)
+	ae1 := New(nil)
+	ae2 := New(errTest1)
+	ae3 := New(ae2)
 	ae4 := fmt.Errorf("%w", ae3)
 	ae5 := errors.Join(ae4, ae3, errTest2)
 
@@ -35,7 +35,7 @@ func Test_AppError_Common(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -54,7 +54,7 @@ func Test_AppError_Common(t *testing.T) {
 	t.Run("success: extending debug message", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithDebug("blah blah")
 
@@ -66,7 +66,7 @@ func Test_AppError_Common(t *testing.T) {
 	t.Run("success: non-debug mode", func(t *testing.T) {
 		initConfig(nonDebugConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithCause(errTest3)
 
@@ -81,7 +81,7 @@ func Test_AppError_Build(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -112,13 +112,13 @@ func Test_AppError_Build(t *testing.T) {
 			Code:   "ErrCustom",
 		})()
 
-		ae1 := NewAppError(errTest1).
+		ae1 := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
 			WithTransParam("kk1", "vv1").
 			WithCause(errTest2)
-		ae2 := NewAppError(errTest2).
+		ae2 := New(errTest2).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
 			WithTransParam("kk1", "vv1")
@@ -157,7 +157,7 @@ func Test_AppError_Build(t *testing.T) {
 			TransKey: "Trans123",
 		})()
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -197,7 +197,7 @@ func Test_AppError_Build(t *testing.T) {
 			}
 		}
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -240,7 +240,7 @@ func Test_AppError_Build(t *testing.T) {
 	t.Run("success: fails to translate but no fallback to error string", func(t *testing.T) {
 		initConfig(failedTransConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -262,7 +262,7 @@ func Test_AppError_Build(t *testing.T) {
 	t.Run("success: fails to translate but fallback to error string", func(t *testing.T) {
 		initConfig(failedTransConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithDebug("debug: %v", 123).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
@@ -284,7 +284,7 @@ func Test_AppError_Build(t *testing.T) {
 	t.Run("success: translation function unset", func(t *testing.T) {
 		initConfig(notransConfig)
 
-		ae := NewAppError(errTest1).
+		ae := New(errTest1).
 			WithParam("k1", "v1").
 			WithParam("k2", "v2").
 			WithTransParam("kk1", "vv1")

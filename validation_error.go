@@ -21,7 +21,7 @@ func NewValidationErrorWithInfoBuilder(infoBuilder InfoBuilderFunc, errs ...erro
 	}
 	appErrs := make(AppErrors, 0, len(errs))
 	for _, e := range errs {
-		appErrs = append(appErrs, NewAppError(e).WithCustomBuilder(infoBuilder))
+		appErrs = append(appErrs, New(e).WithCustomBuilder(infoBuilder))
 	}
 	return NewValidationError(appErrs...)
 }

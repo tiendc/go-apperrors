@@ -78,9 +78,9 @@ func Test_ValidationError(t *testing.T) {
 
 		assert.Nil(t, NewValidationError())
 		vldErr := NewValidationError(
-			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld1).(*defaultAppError)},
-			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld2).(*defaultAppError)},
-			&testVldErr{defaultAppError: NewAppError(err3rdPartyVld3).(*defaultAppError)},
+			&testVldErr{defaultAppError: New(err3rdPartyVld1).(*defaultAppError)},
+			&testVldErr{defaultAppError: New(err3rdPartyVld2).(*defaultAppError)},
+			&testVldErr{defaultAppError: New(err3rdPartyVld3).(*defaultAppError)},
 		)
 
 		result := vldErr.Build(LanguageEn)

@@ -10,8 +10,8 @@ func Test_MultiError_Common(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae1 := NewAppError(errTest1)
-		ae2 := NewAppError(errTest2)
+		ae1 := New(errTest1)
+		ae2 := New(errTest2)
 		me1 := NewMultiError()
 		me2 := AsMultiError(NewMultiError(ae1).
 			WithParam("k1", "v1").
@@ -50,8 +50,8 @@ func Test_MultiError_Build(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		initConfig(okConfig)
 
-		ae1 := NewAppError(errTest1)
-		ae2 := NewAppError(errTest2)
+		ae1 := New(errTest1)
+		ae2 := New(errTest2)
 		me1 := AsMultiError(NewMultiError(ae1))
 		me2 := AsMultiError(NewMultiError(ae1, ae2).
 			WithCustomConfig(&ErrorConfig{
@@ -87,8 +87,8 @@ func Test_MultiError_Build(t *testing.T) {
 			Code:   "Err1234",
 		})()
 
-		ae1 := NewAppError(errTest1)
-		ae2 := NewAppError(errTest2)
+		ae1 := New(errTest1)
+		ae2 := New(errTest2)
 		me1 := AsMultiError(NewMultiError(ae1, ae2).
 			WithCustomConfig(&ErrorConfig{
 				Status:   1234,

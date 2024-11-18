@@ -19,9 +19,9 @@ go get github.com/tiendc/go-apperrors
 
 ## Usage
 
-### Basic
+### General usage
 
-- Initializes `go-apperrors` at program startup
+**Initializes `go-apperrors` at program startup**
 
 ```go
 import gae "github.com/tiendc/go-apperrors"
@@ -39,7 +39,7 @@ func main() {
 }
 ```
 
-- Defines your errors
+**Defines your errors**
 
 ```go
 // It is recommended to add a new directory for placing app errors.
@@ -70,7 +70,7 @@ var (
 )
 ```
 
-- Handles errors in your main processing code
+**Handles errors in your main processing code**
 
 ```go
 // There are some use cases as below.
@@ -99,7 +99,7 @@ if `user.ID` is not in `project.userIDs` {
 }
 ```
 
-- Handles validation errors
+**Handles validation errors**
 
 ```go
 // Validation is normally performed when you parse requests from client.
@@ -132,42 +132,42 @@ func (req UpdateProjectReq) Validate() gae.ValidationError {
 }
 ```
 
-- Handles errors before returning them to client
+**Handles errors before returning them to client**
 
 ```go
 // In the base handler, implements function `RenderError()`
-func RenderError(err error, requestWriter Writer) {
-    // Gets language from request, you can use util `gae.ParseAcceptLanguage()`
+func RenderError(err error) {
+    // Gets language from request, you can use `gae.ParseAcceptLanguage()`
     lang := parseLanguageFromRequest()
 
     // Call goapperrors.Build
     buildResult := gae.Build(err, lang)
 
-    // Log error to Sentry or a similar service
+    // Logs error to Sentry or a similar service
     if buildResult.ErrorInfo.LogLevel != gae.LogLevelNone {
         logErrorToSentry(err, buildResult.ErrorInfo.LogLevel)
     }
 
     // Sends the error as JSON to client
-    requestWriter.SendJSON(buildResult.ErrorInfo)
+    response.SendJSON(buildResult.ErrorInfo)
 }
 
 // In your specific handler, for instance, project handler
-func (h ProjectHandler) UpdateProject(httpReq) {
-    req, err := parseAndValidateRequest(httpReq)
+func (h ProjectHandler) UpdateProject() {
+    updateProjectReq, err := parseAndValidateRequest(httpReq)
     if err != nil {
         baseHandler.RenderError(err)
         return
     }
 
-    resp, err := useCase.UpdateProject(req)
+    resp, err := useCase.UpdateProject(updateProjectReq)
     if err != nil {
         baseHandler.RenderError(err)
         return
     }
 
     // Send result to client
-    requestWriter.SendJSON(resp)
+    response.SendJSON(resp)
 }
 ```
 

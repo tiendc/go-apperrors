@@ -183,9 +183,9 @@ have sensitive information.
 
 #### WrapFunc (default: `nil`)
 
-If this value is default (which is `nil`), `go-apperrors` will use the lib github.com/go-errors/errors
-to wrap and attach stack trace to errors. If you don't want to attach stack trace, just provide an
-self-implementation version on initialization.
+If this value is default (which is `nil`), `go-apperrors` will use the lib
+[github.com/go-errors/errors](github.com/go-errors/errors) to wrap and attach stack trace to errors.
+If you don't want to attach stack trace, provide a self-implementation on initialization.
 
 ```go
 Init(&Config{

@@ -31,7 +31,7 @@ func main() {
     gae.Init(&gae.Config{
         Debug: ENV == "development",
         DefaultLogLevel: gae.LogLevelInfo,
-        TranslationFunc: func (gae.Language, key string, params map[string]any) {
+        TranslationFunc: func (lang gae.Language, key string, params map[string]any) {
             // Provides your implementation to translate message
         },
     })
@@ -107,18 +107,17 @@ if `user.ID` is not in `project.userIDs` {
 // `adapter` code to transform the validation errors to `AppError`s.
 
 // Add a new file to the above directory, says `apperrors/validation_errors.go`.
-// This adapter function will be used later to create validation error.
-func ValidationErrorInfoBuilder(appErr AppError, buildCfg *gae.InfoBuilderConfig) *gae.InfoBuilderResult {
-    // Extracts the inner validation error
+// This building function will be used later to create validation error.
+func ValidationErrorInfoBuilder(err AppError, buildCfg *gae.InfoBuilderConfig) *gae.InfoBuilderResult {
+    // Extracts the inner error and casts it to the validation error type you use
     vldErr := &thirdPartyLib.Error{}
-    if !errors.As(appErr, &vldErr) {
-        // panic, should not happen
+    if !errors.As(err, &vldErr) {
+        // panic, this should not happen
     }
-
     return &gae.InfoBuilderResult{
         // Transform the error from the 3rd party lib to ErrorInfo struct
         ErrorInfo: &gae.ErrorInfo{
-            Message: buildCfg.TranslationFunc(buildCfg.Language, vldErr.getMessage(), appErr.Params()),
+            Message: buildCfg.TranslationFunc(buildCfg.Language, vldErr.getMessage(), err.Params()),
             Source: vldErr.getSource(),
             ...
         }
@@ -171,9 +170,48 @@ func (h ProjectHandler) UpdateProject() {
 }
 ```
 
-### Configuration
+### Global configuration
 
-TBD
+[See the full code](config.go)
+
+#### Debug (default: `false`)
+
+You should synchronize this option with the ENV value. If it is `true`, error building will
+return the fields `Cause` and `Debug` which is convenient for development. If it is `false`,
+they will not be returned which is more secured in `production` env as their values can
+have sensitive information.
+
+#### WrapFunc (default: `nil`)
+
+If this value is default (which is `nil`), `go-apperrors` will use the lib github.com/go-errors/errors
+to wrap and attach stack trace to errors. If you don't want to attach stack trace, just provide an
+self-implementation version on initialization.
+
+```go
+Init(&Config{
+    WrapFunc: func (err error) error { return err }
+})
+```
+
+#### TranslationFunc (default: `nil`)
+
+Sets this option by providing a function to help the lib translate error messages. Otherwise,
+the translation will be disabled.
+
+```go
+Init(&Config{
+    TranslationFunc: func (lang Language, key string, params map[string]any) {
+        // Provides your implementation to translate message
+    },
+})
+```
+
+#### FallbackToErrorContentOnMissingTranslation (default: `true`)
+
+When translation fails, if this flag is `true`, the error content will be used to assign to
+the output `Message` field. Otherwise, the output message will be empty.
+
+NOTE: turn off this flag if you don't want to reveal sensitive information on building.
 
 ## Contributing
 

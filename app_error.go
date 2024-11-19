@@ -175,6 +175,7 @@ func (e *defaultAppError) BuildConfig(lang Language, options ...InfoBuilderOptio
 		Language:        lang,
 		ErrorSeparator:  globalConfig.MultiErrorSeparator,
 		TranslationFunc: globalConfig.TranslationFunc,
+		TranslateTitle:  true,
 		FallbackToErrorContentOnMissingTranslation: globalConfig.FallbackToErrorContentOnMissingTranslation,
 	}
 	for _, opt := range options {
@@ -253,7 +254,7 @@ func (e *defaultAppError) buildMessage(buildCfg *InfoBuilderConfig, result *Info
 		}
 	}
 
-	if title != "" {
+	if buildCfg.TranslateTitle && title != "" {
 		transTitle, err := buildCfg.TranslationFunc(buildCfg.Language, title, params)
 		if err != nil {
 			result.TransMissingKeys = append(result.TransMissingKeys, title)

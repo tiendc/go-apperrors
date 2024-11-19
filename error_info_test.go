@@ -23,6 +23,9 @@ func Test_InfoBuilderOption(t *testing.T) {
 	})(buildConfig)
 	assert.NotNil(t, buildConfig.TranslationFunc)
 
+	InfoBuilderOptionTranslateTitle(true)(buildConfig)
+	assert.True(t, buildConfig.TranslateTitle)
+
 	InfoBuilderOptionSeparator("abc123")(buildConfig)
 	assert.Equal(t, "abc123", buildConfig.ErrorSeparator)
 

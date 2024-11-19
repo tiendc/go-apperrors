@@ -25,6 +25,7 @@ type InfoBuilderConfig struct {
 	Language                                   Language
 	ErrorSeparator                             string
 	TranslationFunc                            TranslationFunc
+	TranslateTitle                             bool
 	FallbackToErrorContentOnMissingTranslation bool
 }
 
@@ -59,6 +60,13 @@ func InfoBuilderOptionCustomConfig(errorConfig ErrorConfig) InfoBuilderOption {
 func InfoBuilderOptionTranslationFunc(translationFunc TranslationFunc) InfoBuilderOption {
 	return func(cfg *InfoBuilderConfig) {
 		cfg.TranslationFunc = translationFunc
+	}
+}
+
+// InfoBuilderOptionTranslateTitle sets flag indicating title translation
+func InfoBuilderOptionTranslateTitle(translateTitle bool) InfoBuilderOption {
+	return func(cfg *InfoBuilderConfig) {
+		cfg.TranslateTitle = translateTitle
 	}
 }
 

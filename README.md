@@ -1,6 +1,6 @@
 [![Go Version][gover-img]][gover] [![GoDoc][doc-img]][doc] [![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov] [![GoReport][rpt-img]][rpt]
 
-# Manipulating application errors with ease
+# Manipulate application errors with ease
 
 ## Functionalities
 
@@ -21,7 +21,7 @@ go get github.com/tiendc/go-apperrors
 
 ### General usage
 
-**Initializes `go-apperrors` at program startup**
+**Initialize `go-apperrors` at program startup**
 
 ```go
 import gae "github.com/tiendc/go-apperrors"
@@ -39,7 +39,7 @@ func main() {
 }
 ```
 
-**Defines your errors**
+**Define your errors**
 
 ```go
 // It is recommended to add a new directory for placing app errors.
@@ -70,10 +70,10 @@ var (
 )
 ```
 
-**Handles errors in your main processing code**
+**Handle errors in your main processing code**
 
 ```go
-// There are some use cases as below.
+// There are 3 basic use cases below.
 
 // 1. You get an unexpected error
 // Just wrap it and return. This will result in error 500 returned to client.
@@ -99,7 +99,7 @@ if `user.ID` is not in `project.userIDs` {
 }
 ```
 
-**Handles validation errors**
+**Handle validation errors**
 
 ```go
 // Validation is normally performed when you parse requests from client.
@@ -131,11 +131,11 @@ func (req UpdateProjectReq) Validate() gae.ValidationError {
 }
 ```
 
-**Handles errors before returning them to client**
+**Handle errors before returning them to client**
 
 ```go
-// In the base handler, implements function `RenderError()`
-func RenderError(err error) {
+// In the base handler, implements function `ErrorResponse()`
+func ErrorResponse(err error) {
     // Gets language from request, you can use `gae.ParseAcceptLanguage()`
     lang := parseLanguageFromRequest()
 
@@ -161,7 +161,7 @@ func (h ProjectHandler) UpdateProject() {
 
     resp, err := useCase.UpdateProject(updateProjectReq)
     if err != nil {
-        baseHandler.RenderError(err)
+        baseHandler.ErrorResponse(err)
         return
     }
 

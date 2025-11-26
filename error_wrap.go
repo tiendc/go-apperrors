@@ -48,11 +48,11 @@ func GetStackTrace(err error) []runtime.Frame {
 func UnwrapToRoot(err error) error {
 	lastErr := err
 	for {
-		e := errors.Unwrap(lastErr)
-		if e == nil {
+		errs := UnwrapMulti(lastErr)
+		if len(errs) == 0 {
 			return lastErr
 		}
-		lastErr = e
+		lastErr = errs[0]
 	}
 }
 

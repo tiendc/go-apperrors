@@ -1,6 +1,7 @@
 package goapperrors
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -63,6 +64,12 @@ func Test_UnwrapToRoot(t *testing.T) {
 	e2 := Wrap(e1)
 	e3 := Wrap(e2)
 	assert.Equal(t, errTest1, UnwrapToRoot(e3))
+
+	e10 := Wrap(errTest1)
+	e20 := Wrap(e10)
+	e21 := errors.Join(e20, errors.New("test"))
+	e30 := Wrap(e21)
+	assert.Equal(t, errTest1, UnwrapToRoot(e30))
 }
 
 type err1 struct{}
